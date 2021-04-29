@@ -24,8 +24,7 @@ const db = {
     { id: 2, sku: '209038', name: 'Velvet' },
   ],
 };
-
-async function list(table: string) {
+export async function list(table: string) {
   return db[table];
 }
 
@@ -54,4 +53,5 @@ module.exports = {
   remove,
   get,
   upsert,
+  db,
 };

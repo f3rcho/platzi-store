@@ -7,6 +7,8 @@ import {
   Body,
   Put,
   Delete,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 const users = [
   { id: '1', name: 'Fernando Cordero', email: 'fcordero@acid.cl' },
@@ -23,6 +25,7 @@ export class UsersController {
   }
 
   @Get(':id')
+  @HttpCode(HttpStatus.ACCEPTED)
   getUser(@Param('id') id: any) {
     const user = users.filter((item) => item.id == id);
     return {
@@ -32,6 +35,7 @@ export class UsersController {
   }
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   createUser(@Body() body: any) {
     const { id, name, email } = body;
     const user = { id, name, email };
@@ -43,6 +47,7 @@ export class UsersController {
     };
   }
   @Put(':id')
+  @HttpCode(HttpStatus.CREATED)
   update(@Param('id') id: number, @Body() payload: any) {
     return {
       id,

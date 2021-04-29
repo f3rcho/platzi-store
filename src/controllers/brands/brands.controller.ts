@@ -1,4 +1,4 @@
-import { Controller, Query, Get, Param } from '@nestjs/common';
+import { Controller, Query, Get, Param, Post, Body } from '@nestjs/common';
 
 @Controller('brands')
 export class BrandsController {
@@ -15,5 +15,12 @@ export class BrandsController {
   @Get(':id')
   getBrand(@Param('id') id: string) {
     return `Brand: ${id}`;
+  }
+  @Post()
+  createBrand(@Body() body: any) {
+    return {
+      message: 'Brand Created',
+      body,
+    };
   }
 }

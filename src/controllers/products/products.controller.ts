@@ -8,6 +8,7 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ProductsService } from '../../services/products/products.service';
 
@@ -29,7 +30,7 @@ export class ProductsController {
   // dynamic routes after
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  getProduct(@Param('id') id: string) {
+  getProduct(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.findOne(id);
   }
 
@@ -41,13 +42,13 @@ export class ProductsController {
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  update(@Param('id') id: string, @Body() paylaod: any) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() paylaod: any) {
     return this.productsService.update(id, paylaod);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  delete(@Param('id') id: string) {
+  delete(@Param('id', ParseIntPipe) id: number) {
     return this.productsService.remove(id);
   }
 }

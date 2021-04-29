@@ -5,15 +5,15 @@ import { Product } from '../../entities/products.entity';
 export class ProductsService {
   private counterId = 1;
   private products: Product[] = [
-    { id: '1', sku: '209060', name: 'Some shoes', price: 19990 },
-    { id: '2', sku: '209038', name: 'Velvet', price: 18990 },
+    { id: 1, sku: '209060', name: 'Some shoes', price: 19990 },
+    { id: 2, sku: '209038', name: 'Velvet', price: 18990 },
   ];
 
   findAll() {
     return this.products;
   }
 
-  findOne(id: string) {
+  findOne(id: number) {
     const product = this.products.find((item) => item.id === id);
     if (!product) {
       throw new NotFoundException(`Product #${id} not found`);
@@ -29,7 +29,7 @@ export class ProductsService {
     this.products.push(newProduct);
     return newProduct;
   }
-  update(id: string, payload: any) {
+  update(id: number, payload: any) {
     const product = this.findOne(id);
     if (!product) {
       throw new NotFoundException(`Product #${id} not found`);
@@ -41,7 +41,7 @@ export class ProductsService {
     };
     return this.products[index];
   }
-  remove(id: string) {
+  remove(id: number) {
     const index = this.products.findIndex((item) => item.id === id);
     if (index === -1) {
       throw new NotFoundException(`Products with id:${id} not found`);

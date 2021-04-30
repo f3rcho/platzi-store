@@ -1,26 +1,66 @@
-import { Controller, Query, Get, Param, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Query,
+  Get,
+  Param,
+  Post,
+  Body,
+  Put,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  ParseIntPipe,
+} from '@nestjs/common';
+import { CustomersService } from '../../services/customers/customers.service';
+import {
+  CreateCustomerDto,
+  UpdateCustomerDto,
+} from '../../dtos/customers.dtos';
 
 @Controller('customers')
 export class CustomersController {
+  constructor(private customersService: CustomersService) {}
   @Get()
-  getCustumers(@Query('limit') limit = 100, @Query('offset') offset: number) {
-    return `Custumers: limit = ${limit} and offset = ${offset}. `;
-  }
-  // static route go first
-  @Get('filter')
-  getCustumerFilter() {
-    return `my static filter`;
+  @HttpCode(HttpStatus.OK)
+  getCustumers(@Query('limit') limit = 100, @Query('offset') offset = 5) {
+    return {
+      message: `Custumers: limit = ${limit} and offset = ${offset}`,
+      data: this.customersService.findAll(),
+    };
   }
   // dynamic routes after
   @Get(':id')
-  getCustumer(@Param('id') id: string) {
-    return `Custumer ${id}`;
+  @HttpCode(HttpStatus.OK)
+  getCustumer(@Param('id', ParseIntPipe) id: number) {
+    return { data: this.customersService.findOne(id) };
   }
   @Post()
-  createCustomer(@Body() body: any) {
+  @HttpCode(HttpStatus.CREATED)
+  createCustomer(@Body() payload: CreateCustomerDto) {
     return {
       message: 'Customer Created',
-      body,
+      data: this.customersService.create(payload),
+    };
+  }
+
+  @Put(':id')
+  @HttpCode(HttpStatus.OK)
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() payload: UpdateCustomerDto,
+  ) {
+    return {
+      message: `Customer updated`,
+      data: this.customersService.update(id, payload),
+    };
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.OK)
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return {
+      message: `Customer deleted`,
+      data: this.customersService.remove(id),
     };
   }
 }

@@ -10,54 +10,53 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-const users = [
-  { id: '1', name: 'Fernando Cordero', email: 'fcordero@acid.cl' },
-  { id: '2', name: 'Dama Castillo', email: 'damarisc@gmail.com' },
-];
+import { UsersService } from '../../services/users/users.service';
+import { ParseIntPipe } from '../../common/parse-int.pipe';
+import { CreateUserDto, UpdateUserDto } from '../../dtos/users.dtos';
+
 @Controller('users')
 export class UsersController {
+  constructor(private usersService: UsersService) {}
   @Get()
-  getUsers(@Query('limit') limit = 100, @Query('offset') offset: number) {
+  @HttpCode(HttpStatus.OK)
+  getUsers(@Query('limit') limit = 100, @Query('offset') offset = 5) {
+    const users = this.usersService.findAll();
     return {
       message: `Users limit: ${limit} and offset: ${offset}`,
-      Body: users,
+      data: users,
     };
   }
 
   @Get(':id')
-  @HttpCode(HttpStatus.ACCEPTED)
-  getUser(@Param('id') id: any) {
-    const user = users.filter((item) => item.id == id);
-    return {
-      message: ``,
-      user,
-    };
+  @HttpCode(HttpStatus.OK)
+  getUser(@Param('id', ParseIntPipe) id: number) {
+    return { data: this.usersService.findOne(id) };
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  createUser(@Body() body: any) {
-    const { id, name, email } = body;
-    const user = { id, name, email };
+  createUser(@Body() payload: CreateUserDto) {
+    return {
+      message: 'User Created',
+      data: this.usersService.create(payload),
+    };
+  }
 
-    users.push(user);
-    return {
-      message: `User created`,
-      user,
-    };
-  }
   @Put(':id')
-  @HttpCode(HttpStatus.CREATED)
-  update(@Param('id') id: number, @Body() payload: any) {
+  @HttpCode(HttpStatus.OK)
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() payload: UpdateUserDto,
+  ) {
     return {
-      id,
-      payload,
+      message: `User updated`,
+      data: this.usersService.update(id, payload),
     };
   }
+
   @Delete(':id')
-  delete(@Param('id') id: number) {
-    return {
-      message: `User delete with ID:${id}`,
-    };
+  @HttpCode(HttpStatus.OK)
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return { data: this.usersService.remove(id) };
   }
 }

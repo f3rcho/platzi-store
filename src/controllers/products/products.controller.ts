@@ -21,25 +21,19 @@ export class ProductsController {
   @Get()
   @HttpCode(HttpStatus.OK)
   getProducts() {
-    return this.productsService.findAll();
-  }
-  // static route go first
-  @Get('filter')
-  @HttpCode(HttpStatus.OK)
-  getFilter() {
-    return `my static filter`;
+    return { data: this.productsService.findAll() };
   }
   // dynamic routes after
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   getProduct(@Param('id', ParseIntPipe) id: number) {
-    return this.productsService.findOne(id);
+    return { data: this.productsService.findOne(id) };
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   createProduct(@Body() payload: CreateProductDto) {
-    return this.productsService.create(payload);
+    return { data: this.productsService.create(payload) };
   }
 
   @Put(':id')
@@ -48,12 +42,12 @@ export class ProductsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() paylaod: UpdateProductDto,
   ) {
-    return this.productsService.update(id, paylaod);
+    return { data: this.productsService.update(id, paylaod) };
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   delete(@Param('id', ParseIntPipe) id: number) {
-    return this.productsService.remove(id);
+    return { data: this.productsService.remove(id) };
   }
 }

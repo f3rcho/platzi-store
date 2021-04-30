@@ -3,8 +3,11 @@ import { PartialType } from '@nestjs/mapped-types';
 export class CreateProductDto {
   @IsString()
   readonly sku: string;
+  @IsString()
   readonly name: string;
+  @IsString()
   readonly url: string;
+
   @IsNumber()
   @IsPositive()
   readonly price: number;

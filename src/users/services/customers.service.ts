@@ -1,11 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Costumer } from '../entities/customers.entity';
+import { Customer } from '../entities/customers.entity';
+import { ProductsService } from '../../products/services/products.service';
 import { CreateCustomerDto, UpdateCustomerDto } from '../dtos/customers.dtos';
+import { Order } from '../entities/orders.entity';
 
 @Injectable()
 export class CustomersService {
+  constructor(private productsService: ProductsService) {}
   private counterId = 2;
-  private customers: Costumer[] = [
+  private customers: Customer[] = [
     { id: 1, name: 'Milton Cordero', email: 'mcordero@example.cl' },
     { id: 2, name: 'Luz Bastidas', email: 'luzm@example.com' },
   ];
@@ -47,5 +50,13 @@ export class CustomersService {
     }
     this.customers.splice(index, 1);
     return `customers with id:${id} removed`;
+  }
+  getOrderByCustomer(id: number): Order {
+    const customer = this.findOne(id);
+    return {
+      date: new Date(),
+      customer,
+      products: this.productsService.findAll(),
+    };
   }
 }

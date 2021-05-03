@@ -60,4 +60,10 @@ export class CustomersController {
       data: this.customersService.remove(id),
     };
   }
+  // orders
+  @Get(':id/orders')
+  @HttpCode(HttpStatus.OK)
+  getOrder(@Param('id', ParseIntPipe) id: number) {
+    return { data: this.customersService.getOrderByCustomer(id) };
+  }
 }

@@ -59,4 +59,10 @@ export class UsersController {
   delete(@Param('id', ParseIntPipe) id: number) {
     return { data: this.usersService.remove(id) };
   }
+  // orders
+  // @Get(':id/orders')
+  // @HttpCode(HttpStatus.OK)
+  // getOrder(@Param('id', ParseIntPipe) id: number) {
+  //   return { data: this.usersService.getOrderByUser(id) };
+  // }
 }

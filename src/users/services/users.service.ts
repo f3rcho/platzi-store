@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from '../entities/users.entity';
 import { CreateUserDto, UpdateUserDto } from '../dtos/users.dtos';
-
 @Injectable()
 export class UsersService {
   private counterId = 2;
@@ -60,4 +59,12 @@ export class UsersService {
     this.users.splice(index, 1);
     return `User with id:${id} removed`;
   }
+  // getOrderByUser(id: number): Order {
+  //   const user = this.findOne(id);
+  //   return {
+  //     date: new Date(),
+  //     user,
+  //     products: this.productsService.findAll(),
+  //   };
+  // }
 }

@@ -24,6 +24,10 @@ $ nest g pipe services/products
 
 ## useFactory
 
+### Used to connect to a database
+
+### HttpService as axios, it is implemented in background
+
 // src/app.module.ts
 
 ```js

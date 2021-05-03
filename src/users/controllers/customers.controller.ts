@@ -11,11 +11,8 @@ import {
   HttpStatus,
   ParseIntPipe,
 } from '@nestjs/common';
-import { CustomersService } from '../../services/customers/customers.service';
-import {
-  CreateCustomerDto,
-  UpdateCustomerDto,
-} from '../../dtos/customers.dtos';
+import { CustomersService } from '../services/customers.service';
+import { CreateCustomerDto, UpdateCustomerDto } from '../dtos/customers.dtos';
 
 @Controller('customers')
 export class CustomersController {

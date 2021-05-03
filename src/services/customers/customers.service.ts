@@ -49,6 +49,6 @@ export class CustomersService {
       throw new NotFoundException(`customers with id:${id} not found`);
     }
     this.customers.splice(index, 1);
-    return `User with id:${id} removed`;
+    return `customers with id:${id} removed`;
   }
 }

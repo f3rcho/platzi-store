@@ -22,6 +22,52 @@ $ nest g s services/products
 $ nest g pipe services/products
 ```
 
+## useFactory
+
+// src/app.module.ts
+
+```js
+import { Module, HttpModule, HttpService } from '@nestjs/common';  // 👈 imports
+
+@Module({
+  imports: [HttpModule, UsersModule, ProductsModule],
+  controllers: [AppController],
+  providers: [
+    imports: [HttpModule, UsersModule, ProductsModule], // 👈 add HttpModule
+    ...,
+    {
+      provide: 'TASKS',
+      useFactory: async (http: HttpService) => { // 👈 implement useFactory
+        const tasks = await http
+          .get('https://jsonplaceholder.typicode.com/todos')
+          .toPromise();
+        return tasks.data;
+      },
+      inject: [HttpService],
+    },
+  ],
+})
+export class AppModule {}
+```
+
+```js
+// src/app.service.ts
+
+import { Injectable, Inject } from '@nestjs/common';
+
+@Injectable()
+export class AppService {
+  constructor(
+    @Inject('API_KEY') private apiKey: string,
+    @Inject('TASKS') private tasks: any[], // 👈 inject TASKS
+  ) {}
+  getHello(): string {
+    console.log(this.tasks); // 👈 print TASKS
+    return `Hello World! ${this.apiKey}`;
+  }
+}
+```
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>

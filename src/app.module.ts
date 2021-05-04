@@ -6,6 +6,7 @@ import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
 
 import { enviroments } from './environments';
+import config from './config';
 
 const API_KEY = '123EXAMPLE';
 const API_KEY_PROD = '345example';
@@ -13,6 +14,7 @@ const API_KEY_PROD = '345example';
   imports: [
     ConfigModule.forRoot({
       envFilePath: enviroments[process.env.NODE_ENV] || '.env',
+      load: [config],
       isGlobal: true,
     }),
     ProductsModule,

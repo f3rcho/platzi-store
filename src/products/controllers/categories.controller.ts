@@ -13,7 +13,7 @@ import {
 import {
   CreateCategoryDto,
   UpdateCategoryDto,
-} from 'src/products/dtos/categories.dtos';
+} from 'src/products/dtos/categories.dto';
 import { CategoriesService } from '../services/categories.service';
 
 @Controller('categories')

@@ -202,6 +202,54 @@ import * as Joi from 'joi';  // 👈
 export class AppModule {}
 ```
 
+## Integrating Swagger and PartialType with Open API
+
+### install
+
+```bash
+$ npm install --save @nestjs/swagger swagger-ui-express
+```
+
+```js
+// src/main.ts
+
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+
+async function bootstrap() {
+  ...
+  const config = new DocumentBuilder()
+    .setTitle('API')
+    .setDescription('PLATZI STORE')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
+  ...
+  await app.listen(3000);
+}
+bootstrap();
+```
+
+Add plugin compilerOptions
+
+```js
+# nest-cli.json
+{
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "plugins": ["@nestjs/swagger/plugin"]
+  }
+}
+```
+
+Replace PartialType on DTOs with swagger
+
+```js
+// src/products/dtos/brand.dtos.ts
+import { PartialType } from '@nestjs/swagger';
+```
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>

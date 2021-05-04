@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from '../entities/users.entity';
 import { ConfigService } from '@nestjs/config';
-import { CreateUserDto, UpdateUserDto } from '../dtos/users.dtos';
+import { CreateUserDto, UpdateUserDto } from '../dtos/users.dto';
 @Injectable()
 export class UsersService {
   constructor(private configService: ConfigService) {}

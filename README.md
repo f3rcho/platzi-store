@@ -138,6 +138,40 @@ export class UsersService {
 $ npm i @nestjs/config
 ```
 
+## config by environments
+
+- Create 2 files and fill them with the info .stag.env and .prod.env
+- create a new file src/environments.ts
+
+```js
+export const enviroments = {
+  dev: '.env',
+  stag: '.stag.env',
+  prod: '.prod.env',
+};
+```
+
+- Them, modify the AppModule
+
+```js
+// src/app.module.ts
+...
+
+import { enviroments } from './enviroments'; // 👈
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: enviroments[process.env.NODE_ENV] || '.env', // 👈
+      isGlobal: true,
+    }),
+    ...
+  ],
+  ...
+})
+export class AppModule {}
+```
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>

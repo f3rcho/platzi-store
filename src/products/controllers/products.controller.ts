@@ -10,12 +10,12 @@ import {
   HttpStatus,
   // ParseIntPipe,
 } from '@nestjs/common';
-import { ApiResponse, ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiBody, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { ProductsService } from '../services/products.service';
 import { ParseIntPipe } from '../../common/parse-int.pipe';
 import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
 
-@ApiTags('products')
+@ApiTags('Products')
 @Controller('products')
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
@@ -32,6 +32,7 @@ export class ProductsController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server error',
   })
+  @ApiOperation({ summary: 'List all products' })
   @Get()
   @HttpCode(HttpStatus.OK)
   getProducts() {
@@ -48,6 +49,7 @@ export class ProductsController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server error',
   })
+  @ApiOperation({ summary: 'List a product by ID' })
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   getProduct(@Param('id', ParseIntPipe) id: number) {
@@ -64,6 +66,7 @@ export class ProductsController {
     description: 'Server error',
   })
   @ApiBody({ description: 'Data info required', type: CreateProductDto })
+  @ApiOperation({ summary: 'Create a product' })
   @Post()
   @HttpCode(HttpStatus.CREATED)
   createProduct(@Body() payload: CreateProductDto) {
@@ -73,6 +76,7 @@ export class ProductsController {
    *
    * @returns update a product
    */
+  @ApiOperation({ summary: 'Update a product by ID' })
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   update(
@@ -85,6 +89,7 @@ export class ProductsController {
    *
    * @returns delete a product
    */
+  @ApiOperation({ summary: 'Delete a product by ID' })
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   delete(@Param('id', ParseIntPipe) id: number) {

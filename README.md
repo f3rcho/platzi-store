@@ -250,6 +250,10 @@ Replace PartialType on DTOs with swagger
 import { PartialType } from '@nestjs/swagger';
 ```
 
+## Extend docs
+
+Using same @nest/swagger, import ApiProperty in order to use in DTOs and ApiOperation to add a summary in each route of your controllers
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>

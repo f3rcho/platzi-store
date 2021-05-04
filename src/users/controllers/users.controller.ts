@@ -10,10 +10,13 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+
 import { UsersService } from '../services/users.service';
 import { ParseIntPipe } from '../../common/parse-int.pipe';
 import { CreateUserDto, UpdateUserDto } from '../dtos/users.dto';
 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}

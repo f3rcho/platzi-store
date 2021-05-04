@@ -172,6 +172,36 @@ import { enviroments } from './enviroments'; // 👈
 export class AppModule {}
 ```
 
+## .env validations schemas with Joi
+
+```bash
+$ npm i joi
+```
+
+```js
+// src/app.module.ts
+
+import * as Joi from 'joi';  // 👈
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: enviroments[process.env.NODE_ENV] || '.env',
+      load: [config],
+      isGlobal: true,
+      validationSchema: Joi.object({ // 👈
+        API_KEY: Joi.number().required(),
+        DATABASE_NAME: Joi.string().required(),
+        DATABASE_PORT: Joi.number().required(),
+      }),
+    }),
+    ...
+  ],
+  ...
+})
+export class AppModule {}
+```
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>

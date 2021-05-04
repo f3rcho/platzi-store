@@ -72,6 +72,64 @@ export class AppService {
 }
 ```
 
+## Global module
+
+### We can create a global module, and have global env, and also services in order to avoid cirluar dependecies
+
+```js
+// src/database/database.module.ts
+
+import { Module, Global } from '@nestjs/common';
+
+const API_KEY = '12345634';
+const API_KEY_PROD = 'PROD1212121SA';
+
+@Global()
+@Module({
+  providers: [
+    {
+      provide: 'API_KEY',
+      useValue: process.env.NODE_ENV === 'prod' ? API_KEY_PROD : API_KEY,
+    },
+  ],
+  exports: ['API_KEY'],
+})
+export class DatabaseModule {}
+```
+
+```js
+// src/app.module.ts
+...
+import { DatabaseModule } from './database/database.module';
+
+@Module({
+  imports: [
+    HttpModule,
+    UsersModule,
+    ProductsModule,
+    DatabaseModule // 👈 Use DatabaseModule like global Module
+   ],
+  ...
+})
+export class AppModule {}
+```
+
+```js
+// src/users/services/users.service.ts
+
+import { Injectable, NotFoundException, Inject } from '@nestjs/common';
+..
+
+@Injectable()
+export class UsersService {
+  constructor(
+    private productsService: ProductsService,
+    @Inject('API_KEY') private apiKey: string, // 👈 Inject API_KEY
+  ) {}
+
+}
+```
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>

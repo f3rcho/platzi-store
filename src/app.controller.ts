@@ -13,4 +13,8 @@ export class AppController {
   getNew(): string {
     return 'New route';
   }
+  @Get('/tasks/')
+  getTasks() {
+    return this.appService.getTasks();
+  }
 }

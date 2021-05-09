@@ -340,6 +340,58 @@ import { MongooseModule } from '@nestjs/mongoose'; // 👈 Import
 export class DatabaseModule {}
 ```
 
+## Mongoose in modules
+
+### create schema
+
+```js
+// src/products/entities/product.entity.ts
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+
+@Schema()
+export class Product extends Document {
+  @Prop({ required: true })
+  name: string;
+
+  @Prop()
+  description: string;
+
+  @Prop({ type: Number })
+  price: number;
+
+  @Prop({ type: Number })
+  stock: number;
+
+  @Prop()
+  image: string;
+}
+
+export const ProductSchema = SchemaFactory.createForClass(Product);
+```
+
+### Add mongoose module and schema into the module
+
+```js
+// src/products/products.module.ts
+...
+import { MongooseModule } from '@nestjs/mongoose';
+import { Product, ProductSchema } from './entities/product.entity';
+
+@Module({
+  imports: [
+    MongooseModule.forFeature([
+      {
+        name: Product.name,
+        schema: ProductSchema,
+      },
+    ]),
+  ],
+  ...
+})
+export class ProductsModule {}
+```
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>

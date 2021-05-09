@@ -290,6 +290,56 @@ async function run() {
 run();
 ```
 
+## Mongoose
+
+### Installation
+
+```bash
+npm install --save @nestjs/mongoose mongoose
+```
+
+### Configuration
+
+```js
+// src/database/database.module.ts
+import { MongooseModule } from '@nestjs/mongoose'; // 👈 Import
+
+@Global()
+@Module({
+  imports: [
+    // 👈
+    MongooseModule.forRootAsync({
+      // 👈 Implement Module
+      useFactory: (configService: ConfigType<typeof config>) => {
+        const {
+          connection,
+          user,
+          password,
+          host,
+          port,
+          dbName,
+        } = configService.mongo;
+        return {
+          uri: `${connection}://${host}:${port}`,
+          user,
+          pass: password,
+          dbName,
+        };
+      },
+      inject: [config.KEY],
+    }),
+  ],
+  providers: [
+    {
+      provide: 'API_KEY',
+      inject: [config.KEY],
+    },
+  ],
+  exports: ['API_KEY', 'MONGO', MongooseModule], // 👈 add in exports
+})
+export class DatabaseModule {}
+```
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>

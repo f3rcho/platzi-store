@@ -254,6 +254,42 @@ import { PartialType } from '@nestjs/swagger';
 
 Using same @nest/swagger, import ApiProperty in order to use in DTOs and ApiOperation to add a summary in each route of your controllers
 
+## Installing and connecting to MongoDB driver
+
+In this case we use docker to create the mongoDB image and mongoCompass to work and add some data(tasks). Once you have this done, keep the next steps
+
+### Install mongo db and types
+
+```bash
+$ npm i mongodb
+```
+
+Types as a Dev dependencies
+
+```bash
+$ npm i @types/mongodb -D
+```
+
+### Creating the connection
+
+```js
+# src/app.module.ts
+
+import { MongoClient } from 'mongodb';
+
+const uri = 'mongodb://root:root@localhost:27017/?authSource=admin&readPreference=primary';
+
+const client = new MongoClient(uri);
+async function run() {
+  await client.connect();
+  const database = client.db('platzi-store');
+  const taskCollection = database.collection('tasks');
+  const tasks = await taskCollection.find().toArray();
+  console.log(tasks);
+}
+run();
+```
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>

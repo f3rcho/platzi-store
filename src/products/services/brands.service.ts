@@ -1,53 +1,37 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { Brand } from '../../products/entitites/brands.entity';
 import { CreateBrandDto, UpdateBrandDto } from '../dtos/brands.dto';
 @Injectable()
 export class BrandsService {
-  private counterId = 2;
-  private brands: Brand[] = [
-    { id: 1, name: 'Adodo', image: 'iamge.png' },
-    { id: 2, name: 'Nite', image: 'iamge.png' },
-  ];
-
+  constructor(@InjectModel(Brand.name) private brandModel: Model<Brand>) {}
   findAll() {
-    return this.brands;
+    return this.brandModel.find().exec();
   }
 
-  findOne(id: number) {
-    const brand = this.brands.find((item) => item.id === id);
+  findOne(id: string) {
+    const brand = this.brandModel.findById(id).exec();
     if (!brand) {
       throw new NotFoundException(`Brand #${id} not found`);
     }
     return brand;
   }
   create(payload: CreateBrandDto) {
-    this.counterId = this.counterId + 1;
-    const newBrand = {
-      id: this.counterId,
-      ...payload,
-    };
-    this.brands.push(newBrand);
-    return newBrand;
+    const newBrand = new this.brandModel(payload);
+    return newBrand.save();
   }
 
-  update(id: number, payload: UpdateBrandDto) {
-    const brand = this.findOne(id);
-    if (!brand) {
+  update(id: string, payload: UpdateBrandDto) {
+    const updatedBrand = this.brandModel
+      .findByIdAndUpdate(id, { $set: payload }, { new: true })
+      .exec();
+    if (!updatedBrand) {
       throw new NotFoundException(`Brand #${id} not found`);
     }
-    const index = this.brands.findIndex((item) => item.id === id);
-    this.brands[index] = {
-      ...brand,
-      ...payload,
-    };
-    return this.brands[index];
+    return updatedBrand;
   }
-  remove(id: number) {
-    const index = this.brands.findIndex((item) => item.id === id);
-    if (index === -1) {
-      throw new NotFoundException(`Brand with id:${id} not found`);
-    }
-    this.brands.splice(index, 1);
-    return true;
+  remove(id: string) {
+    return this.brandModel.findByIdAndDelete(id);
   }
 }

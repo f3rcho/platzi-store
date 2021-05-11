@@ -6,7 +6,6 @@ import {
   Body,
   Put,
   Delete,
-  ParseIntPipe,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
@@ -25,35 +24,23 @@ export class CategoriesController {
   @Get()
   @HttpCode(HttpStatus.OK)
   getCategories() {
-    return { data: this.categoriesService.findAll() };
+    return this.categoriesService.findAll();
   }
 
   @Get(':id')
-  getCategory(@Param('id', ParseIntPipe) id: number) {
-    return { data: this.categoriesService.findOne(id) };
+  getCategory(@Param('id') id: string) {
+    return this.categoriesService.findOne(id);
   }
   @Post()
   createCategory(@Body() payload: CreateCategoryDto) {
-    return {
-      message: 'Category Created',
-      data: this.categoriesService.create(payload),
-    };
+    return this.categoriesService.create(payload);
   }
   @Put(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() payload: UpdateCategoryDto,
-  ) {
-    return {
-      message: 'Category Updated',
-      data: this.categoriesService.update(id, payload),
-    };
+  update(@Param('id') id: string, @Body() payload: UpdateCategoryDto) {
+    return this.categoriesService.update(id, payload);
   }
   @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id: number) {
-    return {
-      message: `Category deleted`,
-      data: this.categoriesService.remove(id),
-    };
+  delete(@Param('id') id: string) {
+    return this.categoriesService.remove(id);
   }
 }

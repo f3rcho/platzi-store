@@ -1,6 +1,5 @@
 import {
   Controller,
-  Query,
   Get,
   Param,
   Post,
@@ -9,7 +8,6 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
-  ParseIntPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -22,51 +20,36 @@ export class CustomersController {
   constructor(private customersService: CustomersService) {}
   @Get()
   @HttpCode(HttpStatus.OK)
-  getCustumers(@Query('limit') limit = 100, @Query('offset') offset = 5) {
-    return {
-      message: `Custumers: limit = ${limit} and offset = ${offset}`,
-      data: this.customersService.findAll(),
-    };
+  getCustumers() {
+    return this.customersService.findAll();
   }
   // dynamic routes after
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  getCustumer(@Param('id', ParseIntPipe) id: number) {
-    return { data: this.customersService.findOne(id) };
+  getCustumer(@Param('id') id: string) {
+    return this.customersService.findOne(id);
   }
   @Post()
   @HttpCode(HttpStatus.CREATED)
   createCustomer(@Body() payload: CreateCustomerDto) {
-    return {
-      message: 'Customer Created',
-      data: this.customersService.create(payload),
-    };
+    return this.customersService.create(payload);
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() payload: UpdateCustomerDto,
-  ) {
-    return {
-      message: `Customer updated`,
-      data: this.customersService.update(id, payload),
-    };
+  update(@Param('id') id: string, @Body() payload: UpdateCustomerDto) {
+    return this.customersService.update(id, payload);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  delete(@Param('id', ParseIntPipe) id: number) {
-    return {
-      message: `Customer deleted`,
-      data: this.customersService.remove(id),
-    };
+  delete(@Param('id') id: string) {
+    return this.customersService.remove(id);
   }
   // orders
   @Get(':id/orders')
   @HttpCode(HttpStatus.OK)
-  getOrder(@Param('id', ParseIntPipe) id: number) {
-    return { data: this.customersService.getOrderByCustomer(id) };
+  getOrder(@Param('id') id: string) {
+    return this.customersService.getOrderByCustomer(id);
   }
 }

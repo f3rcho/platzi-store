@@ -13,7 +13,6 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 
 import { UsersService } from '../services/users.service';
-import { ParseIntPipe } from '../../common/parse-int.pipe';
 import { CreateUserDto, UpdateUserDto } from '../dtos/users.dto';
 
 @ApiTags('Users')
@@ -24,48 +23,36 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   getUsers(@Query('limit') limit = 100, @Query('offset') offset = 5) {
     const users = this.usersService.findAll();
-    return {
-      message: `Users limit: ${limit} and offset: ${offset}`,
-      data: users,
-    };
+    return users;
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  getUser(@Param('id', ParseIntPipe) id: number) {
-    return { data: this.usersService.findOne(id) };
+  getUser(@Param('id') id: string) {
+    return this.usersService.findOne(id);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   createUser(@Body() payload: CreateUserDto) {
-    return {
-      message: 'User Created',
-      data: this.usersService.create(payload),
-    };
+    return this.usersService.create(payload);
   }
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() payload: UpdateUserDto,
-  ) {
-    return {
-      message: `User updated`,
-      data: this.usersService.update(id, payload),
-    };
+  update(@Param('id') id: string, @Body() payload: UpdateUserDto) {
+    return this.usersService.update(id, payload);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  delete(@Param('id', ParseIntPipe) id: number) {
-    return { data: this.usersService.remove(id) };
+  delete(@Param('id') id: string) {
+    return this.usersService.remove(id);
   }
   // orders
-  // @Get(':id/orders')
-  // @HttpCode(HttpStatus.OK)
-  // getOrder(@Param('id', ParseIntPipe) id: number) {
-  //   return { data: this.usersService.getOrderByUser(id) };
-  // }
+  @Get(':id/orders')
+  @HttpCode(HttpStatus.OK)
+  getOrder(@Param('id') id: string) {
+    return { data: this.usersService.getOrderByUser(id) };
+  }
 }

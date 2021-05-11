@@ -1,47 +1,36 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { Category } from '../entitites/categories.entity';
 import { CreateCategoryDto, UpdateCategoryDto } from '../dtos/categories.dto';
 @Injectable()
 export class CategoriesService {
-  private counterId = 2;
-  private categories: Category[] = [
-    { id: 1, name: 'Shoes' },
-    { id: 2, name: 'Close' },
-  ];
+  constructor(
+    @InjectModel(Category.name) private categoryModel: Model<Category>,
+  ) {}
 
   findAll() {
-    return this.categories;
+    return this.categoryModel.find().exec();
   }
-  findOne(id: number) {
-    return this.categories.find((item) => item.id === id);
+  async findOne(id: string) {
+    const category = await this.categoryModel.findById(id).exec();
+    return category;
   }
   create(payload: CreateCategoryDto) {
-    this.counterId++;
-    const newCategory = {
-      id: this.counterId,
-      ...payload,
-    };
-    this.categories.push(newCategory);
-    return newCategory;
+    const newCategory = new this.categoryModel(payload);
+    return newCategory.save();
   }
-  update(id: number, payload: UpdateCategoryDto) {
-    const category = this.findOne(id);
-    if (!category) {
+  update(id: string, payload: UpdateCategoryDto) {
+    const updatedCategory = this.categoryModel
+      .findByIdAndUpdate(id, { $set: payload }, { new: true })
+      .exec();
+    if (!updatedCategory) {
       throw new NotFoundException(`Category with id:${id} not found`);
     }
-    const index = this.categories.findIndex((item) => item.id === id);
-    this.categories[index] = {
-      ...category,
-      ...payload,
-    };
-    return this.categories[index];
+
+    return updatedCategory;
   }
-  remove(id: number) {
-    const index = this.categories.findIndex((item) => item.id === id);
-    if (index === -1) {
-      throw new NotFoundException(`Category with id:${id} not found`);
-    }
-    this.categories.splice(index, 1);
-    return true;
+  remove(id: string) {
+    return this.categoryModel.findByIdAndDelete(id);
   }
 }

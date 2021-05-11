@@ -8,11 +8,9 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
-  // ParseIntPipe,
 } from '@nestjs/common';
 import { ApiResponse, ApiBody, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { ProductsService } from '../services/products.service';
-import { ParseIntPipe } from '../../common/parse-int.pipe';
 import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
 
 @ApiTags('Products')
@@ -36,7 +34,7 @@ export class ProductsController {
   @Get()
   @HttpCode(HttpStatus.OK)
   getProducts() {
-    return { data: this.productsService.findAll() };
+    return this.productsService.findAll();
   }
   /**
    *
@@ -52,8 +50,8 @@ export class ProductsController {
   @ApiOperation({ summary: 'List a product by ID' })
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  getProduct(@Param('id', ParseIntPipe) id: number) {
-    return { data: this.productsService.findOne(id) };
+  getProduct(@Param('id') id: string) {
+    return this.productsService.findOne(id);
   }
   /**
    *
@@ -70,7 +68,7 @@ export class ProductsController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   createProduct(@Body() payload: CreateProductDto) {
-    return { data: this.productsService.create(payload) };
+    return this.productsService.create(payload);
   }
   /**
    *
@@ -79,11 +77,8 @@ export class ProductsController {
   @ApiOperation({ summary: 'Update a product by ID' })
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() paylaod: UpdateProductDto,
-  ) {
-    return { data: this.productsService.update(id, paylaod) };
+  update(@Param('id') id: string, @Body() paylaod: UpdateProductDto) {
+    return this.productsService.update(id, paylaod);
   }
   /**
    *
@@ -92,7 +87,7 @@ export class ProductsController {
   @ApiOperation({ summary: 'Delete a product by ID' })
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  delete(@Param('id', ParseIntPipe) id: number) {
-    return { data: this.productsService.remove(id) };
+  delete(@Param('id') id: string) {
+    return this.productsService.remove(id);
   }
 }

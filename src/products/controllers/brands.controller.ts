@@ -1,13 +1,11 @@
 import {
   Controller,
-  Query,
   Get,
   Param,
   Post,
   Body,
   Put,
   Delete,
-  ParseIntPipe,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
@@ -21,41 +19,29 @@ export class BrandsController {
   constructor(private brandsService: BrandsService) {}
   @Get()
   @HttpCode(HttpStatus.OK)
-  getBrands(@Query('limit') limit = 100, @Query('offset') offset = 5) {
+  getBrands() {
     const brands = this.brandsService.findAll();
-    return {
-      message: `Brands: limit = ${limit} and offset = ${offset}. `,
-      data: brands,
-    };
+    return brands;
   }
   // dynamic routes after
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   getBrand(@Param('id') id: string) {
-    return { data: this.brandsService.findOne(+id) };
+    return this.brandsService.findOne(id);
   }
   @Post()
   @HttpCode(HttpStatus.CREATED)
   createBrand(@Body() payload: CreateBrandDto) {
-    return {
-      message: 'Brand Created',
-      data: this.brandsService.create(payload),
-    };
+    return this.brandsService.create(payload);
   }
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() payload: UpdateBrandDto,
-  ) {
-    return {
-      message: `User updated`,
-      data: this.brandsService.update(id, payload),
-    };
+  update(@Param('id') id: string, @Body() payload: UpdateBrandDto) {
+    return this.brandsService.update(id, payload);
   }
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  delete(@Param('id', ParseIntPipe) id: number) {
-    return { data: this.brandsService.remove(id) };
+  delete(@Param('id') id: string) {
+    return this.brandsService.remove(id);
   }
 }

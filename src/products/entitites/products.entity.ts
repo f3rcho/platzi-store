@@ -22,3 +22,4 @@ export class Product extends Document {
   url: string;
 }
 export const ProductSchema = SchemaFactory.createForClass(Product);
+ProductSchema.index({ price: 1, stock: -1 });

@@ -2,14 +2,22 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Category } from '../entitites/categories.entity';
-import { CreateCategoryDto, UpdateCategoryDto } from '../dtos/categories.dto';
+import {
+  CreateCategoryDto,
+  FilterCategoryDto,
+  UpdateCategoryDto,
+} from '../dtos/categories.dto';
 @Injectable()
 export class CategoriesService {
   constructor(
     @InjectModel(Category.name) private categoryModel: Model<Category>,
   ) {}
 
-  findAll() {
+  findAll(params?: FilterCategoryDto) {
+    if (params) {
+      const { limit, offset } = params;
+      return this.categoryModel.find().skip(offset).limit(limit).exec();
+    }
     return this.categoryModel.find().exec();
   }
   async findOne(id: string) {

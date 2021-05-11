@@ -2,11 +2,19 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Brand } from '../../products/entitites/brands.entity';
-import { CreateBrandDto, UpdateBrandDto } from '../dtos/brands.dto';
+import {
+  CreateBrandDto,
+  FilterBrandDto,
+  UpdateBrandDto,
+} from '../dtos/brands.dto';
 @Injectable()
 export class BrandsService {
   constructor(@InjectModel(Brand.name) private brandModel: Model<Brand>) {}
-  findAll() {
+  findAll(params: FilterBrandDto) {
+    if (params) {
+      const { limit, offset } = params;
+      return this.brandModel.find().skip(offset).limit(limit).exec();
+    }
     return this.brandModel.find().exec();
   }
 

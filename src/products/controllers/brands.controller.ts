@@ -8,20 +8,25 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { BrandsService } from '../services/brands.service';
 import { MongoidPipe } from '../../common/mongoid.pipe';
-import { CreateBrandDto, UpdateBrandDto } from '../dtos/brands.dto';
+import {
+  CreateBrandDto,
+  FilterBrandDto,
+  UpdateBrandDto,
+} from '../dtos/brands.dto';
 @ApiTags('Brands')
 @Controller('brands')
 export class BrandsController {
   constructor(private brandsService: BrandsService) {}
   @Get()
   @HttpCode(HttpStatus.OK)
-  getBrands() {
-    const brands = this.brandsService.findAll();
+  getBrands(@Query() params: FilterBrandDto) {
+    const brands = this.brandsService.findAll(params);
     return brands;
   }
   // dynamic routes after

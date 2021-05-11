@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Query } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 // import { ConfigService } from '@nestjs/config';
 import { User } from '../entities/users.entity';
-import { CreateUserDto, UpdateUserDto } from '../dtos/users.dto';
+import { CreateUserDto, FilterUserDto, UpdateUserDto } from '../dtos/users.dto';
 
 import { ProductsService } from '../../products/services/products.service';
 @Injectable()
@@ -15,7 +15,11 @@ export class UsersService {
     @InjectModel(User.name) private userModel: Model<User>,
   ) {}
 
-  findAll() {
+  findAll(params?: FilterUserDto) {
+    if (params) {
+      const { limit, offset } = params;
+      return this.userModel.find().skip(offset).limit(limit).exec();
+    }
     const users = this.userModel.find().exec();
     return users;
   }

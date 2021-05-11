@@ -6,6 +6,7 @@ import {
   Body,
   Put,
   Delete,
+  Query,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
@@ -13,7 +14,11 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { CustomersService } from '../services/customers.service';
 import { MongoidPipe } from '../../common/mongoid.pipe';
-import { CreateCustomerDto, UpdateCustomerDto } from '../dtos/customers.dto';
+import {
+  CreateCustomerDto,
+  FilterCustomerDto,
+  UpdateCustomerDto,
+} from '../dtos/customers.dto';
 
 @ApiTags('Customer')
 @Controller('customers')
@@ -21,8 +26,8 @@ export class CustomersController {
   constructor(private customersService: CustomersService) {}
   @Get()
   @HttpCode(HttpStatus.OK)
-  getCustumers() {
-    return this.customersService.findAll();
+  getCustumers(@Query() params: FilterCustomerDto) {
+    return this.customersService.findAll(params);
   }
   // dynamic routes after
   @Get(':id')

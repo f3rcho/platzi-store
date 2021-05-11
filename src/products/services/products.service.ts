@@ -2,15 +2,23 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Product } from '../entitites/products.entity';
-import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
+import {
+  CreateProductDto,
+  UpdateProductDto,
+  FilterProductDto,
+} from '../dtos/products.dto';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectModel(Product.name) private productModel: Model<Product>,
   ) {}
-  async findAll() {
-    return { data: await this.productModel.find().exec() };
+  findAll(params?: FilterProductDto) {
+    if (params) {
+      const { limit, offset } = params;
+      return this.productModel.find().skip(offset).limit(limit).exec();
+    }
+    return this.productModel.find().exec();
   }
 
   async findOne(id: string) {

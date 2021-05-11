@@ -8,12 +8,14 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { MongoidPipe } from '../../common/mongoid.pipe';
 import {
   CreateCategoryDto,
+  FilterCategoryDto,
   UpdateCategoryDto,
 } from 'src/products/dtos/categories.dto';
 import { CategoriesService } from '../services/categories.service';
@@ -24,8 +26,8 @@ export class CategoriesController {
   constructor(private categoriesService: CategoriesService) {}
   @Get()
   @HttpCode(HttpStatus.OK)
-  getCategories() {
-    return this.categoriesService.findAll();
+  getCategories(@Query() params: FilterCategoryDto) {
+    return this.categoriesService.findAll(params);
   }
 
   @Get(':id')

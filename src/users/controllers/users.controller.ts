@@ -15,6 +15,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { UsersService } from '../services/users.service';
 import { MongoidPipe } from '../../common/mongoid.pipe';
 import { CreateUserDto, UpdateUserDto } from '../dtos/users.dto';
+import { FilterUserDto } from 'src/users/dtos/users.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -22,8 +23,8 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
   @Get()
   @HttpCode(HttpStatus.OK)
-  getUsers(@Query('limit') limit = 100, @Query('offset') offset = 5) {
-    const users = this.usersService.findAll();
+  getUsers(@Query() params: FilterUserDto) {
+    const users = this.usersService.findAll(params);
     return users;
   }
 

@@ -4,7 +4,11 @@ import { Model } from 'mongoose';
 
 import { Customer } from '../entities/customers.entity';
 import { ProductsService } from '../../products/services/products.service';
-import { CreateCustomerDto, UpdateCustomerDto } from '../dtos/customers.dto';
+import {
+  CreateCustomerDto,
+  FilterCustomerDto,
+  UpdateCustomerDto,
+} from '../dtos/customers.dto';
 
 @Injectable()
 export class CustomersService {
@@ -13,7 +17,11 @@ export class CustomersService {
     @InjectModel(Customer.name) private customerModel: Model<Customer>,
   ) {}
 
-  findAll() {
+  findAll(params?: FilterCustomerDto) {
+    if (params) {
+      const { limit, offset } = params;
+      return this.customerModel.find().skip(offset).limit(limit).exec();
+    }
     return this.customerModel.find().exec();
   }
   async findOne(id: string) {

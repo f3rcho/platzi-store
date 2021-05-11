@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Param,
+  Query,
   Post,
   Body,
   Put,
@@ -12,7 +13,11 @@ import {
 import { ApiResponse, ApiBody, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { ProductsService } from '../services/products.service';
 import { MongoidPipe } from '../../common/mongoid.pipe';
-import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
+import {
+  CreateProductDto,
+  FilterProductDto,
+  UpdateProductDto,
+} from '../dtos/products.dto';
 
 @ApiTags('Products')
 @Controller('products')
@@ -34,8 +39,8 @@ export class ProductsController {
   @ApiOperation({ summary: 'List all products' })
   @Get()
   @HttpCode(HttpStatus.OK)
-  getProducts() {
-    return this.productsService.findAll();
+  getProducts(@Query() params: FilterProductDto) {
+    return this.productsService.findAll(params);
   }
   /**
    *

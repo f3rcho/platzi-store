@@ -9,6 +9,8 @@ import { CategoriesService } from './services/categories.service';
 import { BrandsService } from './services/brands.service';
 
 import { Product, ProductSchema } from './entitites/products.entity';
+import { Brand, BrandSchema } from './entitites/brands.entity';
+import { Category, CategorySchema } from './entitites/categories.entity';
 
 @Module({
   imports: [
@@ -16,6 +18,14 @@ import { Product, ProductSchema } from './entitites/products.entity';
       {
         name: Product.name,
         schema: ProductSchema,
+      },
+      {
+        name: Brand.name,
+        schema: BrandSchema,
+      },
+      {
+        name: Category.name,
+        schema: CategorySchema,
       },
     ]),
   ],

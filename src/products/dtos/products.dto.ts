@@ -13,7 +13,11 @@ export class CreateProductDto {
 
   @IsNumber()
   @IsPositive()
-  @ApiProperty({ description: 'porducts Price ' })
+  @ApiProperty({ description: 'products Price ' })
   readonly price: number;
+  @IsNumber()
+  @IsPositive()
+  @ApiProperty({ description: 'products stock ' })
+  readonly stock: number;
 }
 export class UpdateProductDto extends PartialType(CreateProductDto) {}

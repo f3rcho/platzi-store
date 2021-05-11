@@ -12,6 +12,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 
 import { BrandsService } from '../services/brands.service';
+import { MongoidPipe } from '../../common/mongoid.pipe';
 import { CreateBrandDto, UpdateBrandDto } from '../dtos/brands.dto';
 @ApiTags('Brands')
 @Controller('brands')
@@ -26,7 +27,7 @@ export class BrandsController {
   // dynamic routes after
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  getBrand(@Param('id') id: string) {
+  getBrand(@Param('id', MongoidPipe) id: string) {
     return this.brandsService.findOne(id);
   }
   @Post()
@@ -36,12 +37,15 @@ export class BrandsController {
   }
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  update(@Param('id') id: string, @Body() payload: UpdateBrandDto) {
+  update(
+    @Param('id', MongoidPipe) id: string,
+    @Body() payload: UpdateBrandDto,
+  ) {
     return this.brandsService.update(id, payload);
   }
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  delete(@Param('id') id: string) {
+  delete(@Param('id', MongoidPipe) id: string) {
     return this.brandsService.remove(id);
   }
 }

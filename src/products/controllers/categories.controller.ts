@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
+import { MongoidPipe } from '../../common/mongoid.pipe';
 import {
   CreateCategoryDto,
   UpdateCategoryDto,
@@ -28,7 +29,7 @@ export class CategoriesController {
   }
 
   @Get(':id')
-  getCategory(@Param('id') id: string) {
+  getCategory(@Param('id', MongoidPipe) id: string) {
     return this.categoriesService.findOne(id);
   }
   @Post()
@@ -36,11 +37,14 @@ export class CategoriesController {
     return this.categoriesService.create(payload);
   }
   @Put(':id')
-  update(@Param('id') id: string, @Body() payload: UpdateCategoryDto) {
+  update(
+    @Param('id', MongoidPipe) id: string,
+    @Body() payload: UpdateCategoryDto,
+  ) {
     return this.categoriesService.update(id, payload);
   }
   @Delete(':id')
-  delete(@Param('id') id: string) {
+  delete(@Param('id', MongoidPipe) id: string) {
     return this.categoriesService.remove(id);
   }
 }

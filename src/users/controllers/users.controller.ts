@@ -13,6 +13,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 
 import { UsersService } from '../services/users.service';
+import { MongoidPipe } from '../../common/mongoid.pipe';
 import { CreateUserDto, UpdateUserDto } from '../dtos/users.dto';
 
 @ApiTags('Users')
@@ -28,7 +29,7 @@ export class UsersController {
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  getUser(@Param('id') id: string) {
+  getUser(@Param('id', MongoidPipe) id: string) {
     return this.usersService.findOne(id);
   }
 
@@ -40,19 +41,19 @@ export class UsersController {
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  update(@Param('id') id: string, @Body() payload: UpdateUserDto) {
+  update(@Param('id', MongoidPipe) id: string, @Body() payload: UpdateUserDto) {
     return this.usersService.update(id, payload);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  delete(@Param('id') id: string) {
+  delete(@Param('id', MongoidPipe) id: string) {
     return this.usersService.remove(id);
   }
   // orders
   @Get(':id/orders')
   @HttpCode(HttpStatus.OK)
-  getOrder(@Param('id') id: string) {
+  getOrder(@Param('id', MongoidPipe) id: string) {
     return { data: this.usersService.getOrderByUser(id) };
   }
 }

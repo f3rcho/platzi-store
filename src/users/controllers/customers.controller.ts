@@ -12,6 +12,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 
 import { CustomersService } from '../services/customers.service';
+import { MongoidPipe } from '../../common/mongoid.pipe';
 import { CreateCustomerDto, UpdateCustomerDto } from '../dtos/customers.dto';
 
 @ApiTags('Customer')
@@ -26,7 +27,7 @@ export class CustomersController {
   // dynamic routes after
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  getCustumer(@Param('id') id: string) {
+  getCustumer(@Param('id', MongoidPipe) id: string) {
     return this.customersService.findOne(id);
   }
   @Post()
@@ -37,19 +38,22 @@ export class CustomersController {
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  update(@Param('id') id: string, @Body() payload: UpdateCustomerDto) {
+  update(
+    @Param('id', MongoidPipe) id: string,
+    @Body() payload: UpdateCustomerDto,
+  ) {
     return this.customersService.update(id, payload);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  delete(@Param('id') id: string) {
+  delete(@Param('id', MongoidPipe) id: string) {
     return this.customersService.remove(id);
   }
   // orders
   @Get(':id/orders')
   @HttpCode(HttpStatus.OK)
-  getOrder(@Param('id') id: string) {
+  getOrder(@Param('id', MongoidPipe) id: string) {
     return this.customersService.getOrderByCustomer(id);
   }
 }

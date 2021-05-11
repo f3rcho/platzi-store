@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiBody, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { ProductsService } from '../services/products.service';
+import { MongoidPipe } from '../../common/mongoid.pipe';
 import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
 
 @ApiTags('Products')
@@ -50,7 +51,7 @@ export class ProductsController {
   @ApiOperation({ summary: 'List a product by ID' })
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  getProduct(@Param('id') id: string) {
+  getProduct(@Param('id', MongoidPipe) id: string) {
     return this.productsService.findOne(id);
   }
   /**
@@ -77,7 +78,10 @@ export class ProductsController {
   @ApiOperation({ summary: 'Update a product by ID' })
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  update(@Param('id') id: string, @Body() paylaod: UpdateProductDto) {
+  update(
+    @Param('id', MongoidPipe) id: string,
+    @Body() paylaod: UpdateProductDto,
+  ) {
     return this.productsService.update(id, paylaod);
   }
   /**
@@ -87,7 +91,7 @@ export class ProductsController {
   @ApiOperation({ summary: 'Delete a product by ID' })
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  delete(@Param('id') id: string) {
+  delete(@Param('id', MongoidPipe) id: string) {
     return this.productsService.remove(id);
   }
 }

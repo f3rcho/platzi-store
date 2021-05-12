@@ -21,17 +21,22 @@ export class ProductsService {
       if (minPrice && maxPrice) {
         filters.price = { $gte: minPrice, $lte: maxPrice };
       }
-      return this.productModel.find(filters).skip(offset).limit(limit).exec();
+      return this.productModel
+        .find(filters)
+        .populate('brand')
+        .skip(offset)
+        .limit(limit)
+        .exec();
     }
-    return this.productModel.find().exec();
+    return this.productModel.find().populate('brand').exec();
   }
 
-  async findOne(id: string) {
-    const product = await this.productModel.findById(id).exec();
+  findOne(id: string) {
+    const product = this.productModel.findById(id).populate('brand').exec();
     if (!product) {
       throw new NotFoundException(`Product #${id} not found`);
     }
-    return { data: product };
+    return product;
   }
   create(payload: CreateProductDto) {
     const newProduct = new this.productModel(payload);

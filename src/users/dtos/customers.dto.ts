@@ -6,8 +6,11 @@ import {
   Min,
   IsArray,
   IsNotEmpty,
+  ValidateNested,
 } from 'class-validator';
 import { PartialType } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { CreateSkillDto } from './skills.dto';
 export class CreateCustomerDto {
   @IsString()
   readonly name: string;
@@ -15,7 +18,9 @@ export class CreateCustomerDto {
   readonly email: string;
   @IsArray()
   @IsNotEmpty()
-  readonly skills: any;
+  @ValidateNested({ each: true })
+  @Type(() => CreateSkillDto)
+  readonly skills: CreateSkillDto[];
 }
 export class UpdateCustomerDto extends PartialType(CreateCustomerDto) {}
 export class FilterCustomerDto {

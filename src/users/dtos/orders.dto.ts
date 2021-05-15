@@ -7,7 +7,7 @@ import {
   IsPositive,
   Min,
 } from 'class-validator';
-import { PartialType } from '@nestjs/swagger';
+import { PartialType, OmitType } from '@nestjs/swagger';
 
 export class CreateOrderDto {
   @IsNotEmpty()
@@ -19,11 +19,12 @@ export class CreateOrderDto {
   readonly date: Date;
 
   @IsArray()
-  @IsNotEmpty()
   readonly products: string[];
 }
 
-export class UpdateOrderDto extends PartialType(CreateOrderDto) {}
+export class UpdateOrderDto extends PartialType(
+  OmitType(CreateOrderDto, ['products']),
+) {}
 
 export class FilterOrderDto {
   @IsOptional()
@@ -32,4 +33,9 @@ export class FilterOrderDto {
   @IsOptional()
   @Min(0)
   offset: number;
+}
+
+export class AddProductToOrderDto {
+  @IsArray()
+  readonly productsId: string[];
 }

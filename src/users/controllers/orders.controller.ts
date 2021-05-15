@@ -13,6 +13,7 @@ import {
   CreateOrderDto,
   FilterOrderDto,
   UpdateOrderDto,
+  AddProductToOrderDto,
 } from '../dtos/orders.dto';
 import { OrdersService } from '../services/orders.service';
 
@@ -40,11 +41,25 @@ export class OrdersController {
     @Param('id', MongoidPipe) id: string,
     @Body() payload: UpdateOrderDto,
   ) {
-    return this.updateOrder(id, payload);
+    return this.ordersService.update(id, payload);
+  }
+  @Put(':orderId/products')
+  AddProduct(
+    @Param('orderId', MongoidPipe) orderId: string,
+    @Body() payload: AddProductToOrderDto,
+  ) {
+    return this.ordersService.addProductsById(orderId, payload.productsId);
   }
 
   @Delete(':id')
   deleteOrder(@Param('id', MongoidPipe) id: string) {
     return this.ordersService.remove(id);
+  }
+  @Delete(':orderId/products/:productId')
+  removeProduct(
+    @Param('orderId') orderId: string,
+    @Param('productId') productId: string,
+  ) {
+    return this.ordersService.removeProductFromOrder(orderId, productId);
   }
 }

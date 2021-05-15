@@ -15,13 +15,24 @@ export class OrdersService {
   findAll(params?: FilterOrderDto) {
     if (params) {
       const { limit, offset } = params;
-      return this.orderModel.find().skip(offset).limit(limit).exec();
+      return this.orderModel
+        .find()
+        .populate('products')
+        .populate('customer')
+        .populate('skills')
+        .skip(offset)
+        .limit(limit)
+        .exec();
     }
     return this.orderModel.find().exec();
   }
 
   findOne(id: string) {
-    const order = this.orderModel.findById(id).exec();
+    const order = this.orderModel
+      .findById(id)
+      .populate('products')
+      .populate('customer')
+      .exec();
     if (!order) {
       throw new NotFoundException(`order with id:${id} not found`);
     }
@@ -39,7 +50,24 @@ export class OrdersService {
       .exec();
     return updatedOrder;
   }
-  remove(id: string) {
-    return this.orderModel.findByIdAndDelete(id);
+  async addProductsById(orderId: string, productsId: string[]) {
+    const order = await this.orderModel.findById(orderId);
+    if (!order) {
+      throw new NotFoundException(`order ${order} not found`);
+    }
+    productsId.forEach((id) => order.products.push(id));
+    return order.save();
+  }
+  async remove(orderId: string) {
+    const order = await this.orderModel.findById(orderId);
+    if (!order) {
+      throw new NotFoundException(`order ${order} not found`);
+    }
+    return this.orderModel.findByIdAndDelete(orderId);
+  }
+  async removeProductFromOrder(orderId: string, productId: string) {
+    const order = await this.orderModel.findById(orderId);
+    order.products.pull(productId);
+    return order.save();
   }
 }

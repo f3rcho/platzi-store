@@ -14,8 +14,7 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { UsersService } from '../services/users.service';
 import { MongoidPipe } from '../../common/mongoid.pipe';
-import { CreateUserDto, UpdateUserDto } from '../dtos/users.dto';
-import { FilterUserDto } from 'src/users/dtos/users.dto';
+import { CreateUserDto, UpdateUserDto, FilterUserDto } from '../dtos/users.dto';
 
 @ApiTags('Users')
 @Controller('users')

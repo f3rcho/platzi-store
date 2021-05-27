@@ -8,7 +8,7 @@ import {
   Put,
   Delete,
 } from '@nestjs/common';
-import { MongoidPipe } from 'src/common/mongoid.pipe';
+import { MongoidPipe } from '../../common/mongoid.pipe';
 import {
   CreateOrderDto,
   FilterOrderDto,

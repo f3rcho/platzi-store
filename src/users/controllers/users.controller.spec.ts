@@ -104,7 +104,7 @@ describe('UsersController', () => {
     expect(controller.update(id, payload)).toStrictEqual(users);
   });
 
-  it('Should return a trusty value', () => {
+  it('Should return a truthy value', () => {
     const id = 'x, y, z';
     expect(controller.delete(id)).toBeTruthy();
   });

@@ -34,12 +34,12 @@ describe('UsersController', () => {
 
     findOne: jest.fn((id) => {
       if (!id) return null;
-      const user = users.filter((item) => item.id);
+      const user = users.filter((item) => item.id === id);
       return user;
     }),
 
-    update: jest.fn((id) => {
-      if (id) {
+    update: jest.fn((id, payload) => {
+      if (id && payload) {
         const user = users.filter((item) => item.id);
         return user;
       }

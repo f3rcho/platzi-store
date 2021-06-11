@@ -314,16 +314,73 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## Docker and postgres
+
+Once you create your docker-compose file, exec the command to run the postgres image detach:
+
+```bash
+docker-compose up -d postgres
+```
+
+Check if it was created
+
+```bash
+docker-compose ps
+```
+
+Watch logs
+
+```bash
+docker-compose logs -f postgres
+```
+
+### Working with postgres
+
+To access to database we need to exec a bash inside dockker container
+
+```bash
+docker-compose exec postgres bash
+```
+
+Once we get into the terminal, we need to access to database
+
+```bash
+psql -h localhost -d my_db -U root
+```
+
+Now we are into postgres.
+
+Check our database
+
+```bash
+\d+
+```
+
+And
+
+```bash
+\q
+```
+
+to quit
+
+### Using pgadmin
+
+Here we configured pgadmin in our docker-compose
+
+```yaml
+pgadmin:
+  image: dpage/pgadmin4
+  environment:
+    - PGADMIN_DEFAULT_EMAIL=fcordero@acid.cl
+    - PGADMIN_DEFAULT_PASSWORD=root
+  ports:
+    - '5050:80'
+```
+
+Once we run docker-compose up -d, we could access to localhost:5050 and configured our db server.
+We need to extract the ip address from our docker container running docker inspect.

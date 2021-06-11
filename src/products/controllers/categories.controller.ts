@@ -17,7 +17,7 @@ import {
   CreateCategoryDto,
   FilterCategoryDto,
   UpdateCategoryDto,
-} from 'src/products/dtos/categories.dto';
+} from '../dtos/categories.dto';
 import { CategoriesService } from '../services/categories.service';
 
 @ApiTags('Categories')

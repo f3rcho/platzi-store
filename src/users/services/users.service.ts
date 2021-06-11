@@ -6,12 +6,12 @@ import { Model } from 'mongoose';
 import { User } from '../entities/users.entity';
 import { CreateUserDto, FilterUserDto, UpdateUserDto } from '../dtos/users.dto';
 
-import { ProductsService } from '../../products/services/products.service';
+// import { ProductsService } from '../../products/services/products.service';
 @Injectable()
 export class UsersService {
   constructor(
     // private configService: ConfigService,
-    private productsService: ProductsService,
+    // private productsService: ProductsService,
     @InjectModel(User.name) private userModel: Model<User>,
   ) {}
 
@@ -49,7 +49,6 @@ export class UsersService {
     return {
       date: new Date(),
       user,
-      products: this.productsService.findAll(),
     };
   }
 }

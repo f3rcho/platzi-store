@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -12,5 +12,10 @@ export class AppController {
   @Get('new')
   getNew(): string {
     return 'New route';
+  }
+  @Get('tasks')
+  @HttpCode(HttpStatus.OK)
+  tasks() {
+    return this.appService.getTasks();
   }
 }

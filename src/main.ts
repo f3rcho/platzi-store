@@ -5,7 +5,9 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: ['error', 'warn', 'log'],
+  });
   const configService = app.get(ConfigService);
   const port = configService.get('API_PORT');
 
@@ -24,6 +26,6 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   await app.listen(port);
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  console.log(`Application is running on http://localhost:${port}`);
 }
 bootstrap();

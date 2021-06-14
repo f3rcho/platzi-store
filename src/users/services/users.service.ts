@@ -1,9 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger, Inject } from '@nestjs/common';
 import { User } from '../entities/users.entity';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDto, UpdateUserDto } from '../dtos/users.dto';
+
 @Injectable()
 export class UsersService {
+  private readonly logger = new Logger(UsersService.name);
   constructor(private configService: ConfigService) {}
   private counterId = 2;
   private users: User[] = [
@@ -23,6 +25,7 @@ export class UsersService {
 
   findAll() {
     const dbName = this.configService.get('DATABASE_NAME');
+    this.logger.log(`'findAll': ${dbName}`);
     console.log(dbName);
 
     return this.users;
@@ -64,6 +67,7 @@ export class UsersService {
     this.users.splice(index, 1);
     return `User with id:${id} removed`;
   }
+
   // getOrderByUser(id: number): Order {
   //   const user = this.findOne(id);
   //   return {

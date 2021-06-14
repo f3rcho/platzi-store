@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException, Logger, Inject } from '@nestjs/common';
+import { Client } from 'pg';
 import { User } from '../entities/users.entity';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDto, UpdateUserDto } from '../dtos/users.dto';
@@ -6,7 +7,11 @@ import { CreateUserDto, UpdateUserDto } from '../dtos/users.dto';
 @Injectable()
 export class UsersService {
   private readonly logger = new Logger(UsersService.name);
-  constructor(private configService: ConfigService) {}
+
+  constructor(
+    private configService: ConfigService,
+    @Inject('PG') private clientPG: Client,
+  ) {}
   private counterId = 2;
   private users: User[] = [
     {
@@ -66,6 +71,19 @@ export class UsersService {
     }
     this.users.splice(index, 1);
     return `User with id:${id} removed`;
+  }
+  getTasks() {
+    this.logger.log('[getTasks]: request');
+    return new Promise((resolve, reject) => {
+      this.clientPG.query('SELECT * FROM tasks', (err, res) => {
+        if (err) {
+          this.logger.error(`Error calling getTasks ${err}`);
+          reject(err);
+        }
+        this.logger.log(`[getTasks] - response: ${JSON.stringify(res.rows)}  `);
+        resolve(res.rows);
+      });
+    });
   }
 
   // getOrderByUser(id: number): Order {

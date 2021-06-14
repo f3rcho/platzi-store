@@ -29,7 +29,11 @@ export class UsersController {
       data: users,
     };
   }
-
+  @Get('tasks')
+  @HttpCode(HttpStatus.OK)
+  tasks() {
+    return this.usersService.getTasks();
+  }
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   getUser(@Param('id', ParseIntPipe) id: number) {

@@ -59,40 +59,40 @@ export class ProductsController {
    *
    * @returns creates a product
    */
-  // @ApiResponse({ status: HttpStatus.CREATED, description: 'Product created!' })
-  // @ApiResponse({ status: HttpStatus.NO_CONTENT, description: 'Data undefined' })
-  // @ApiResponse({
-  //   status: HttpStatus.INTERNAL_SERVER_ERROR,
-  //   description: 'Server error',
-  // })
-  // @ApiBody({ description: 'Data info required', type: CreateProductDto })
-  // @ApiOperation({ summary: 'Create a product' })
-  // @Post()
-  // @HttpCode(HttpStatus.CREATED)
-  // createProduct(@Body() payload: CreateProductDto) {
-  //   return { data: this.productsService.create(payload) };
-  // }
-  // /**
-  //  *
-  //  * @returns update a product
-  //  */
-  // @ApiOperation({ summary: 'Update a product by ID' })
-  // @Put(':id')
-  // @HttpCode(HttpStatus.OK)
-  // update(
-  //   @Param('id', ParseIntPipe) id: number,
-  //   @Body() paylaod: UpdateProductDto,
-  // ) {
-  //   return { data: this.productsService.update(id, paylaod) };
-  // }
-  // /**
-  //  *
-  //  * @returns delete a product
-  //  */
-  // @ApiOperation({ summary: 'Delete a product by ID' })
-  // @Delete(':id')
-  // @HttpCode(HttpStatus.OK)
-  // delete(@Param('id', ParseIntPipe) id: number) {
-  //   return { data: this.productsService.remove(id) };
-  // }
+  @ApiResponse({ status: HttpStatus.CREATED, description: 'Product created!' })
+  @ApiResponse({ status: HttpStatus.NO_CONTENT, description: 'Data undefined' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server error',
+  })
+  @ApiBody({ description: 'Data info required', type: CreateProductDto })
+  @ApiOperation({ summary: 'Create a product' })
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  createProduct(@Body() payload: CreateProductDto) {
+    return this.productsService.create(payload);
+  }
+  /**
+   *
+   * @returns update a product
+   */
+  @ApiOperation({ summary: 'Update a product by ID' })
+  @Put(':id')
+  @HttpCode(HttpStatus.OK)
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() paylaod: UpdateProductDto,
+  ) {
+    return this.productsService.update(id, paylaod);
+  }
+  /**
+   *
+   * @returns delete a product
+   */
+  @ApiOperation({ summary: 'Delete a product by ID' })
+  @Delete(':id')
+  @HttpCode(HttpStatus.OK)
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return this.productsService.remove(id);
+  }
 }

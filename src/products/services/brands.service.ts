@@ -20,34 +20,18 @@ export class BrandsService {
     }
     return brand;
   }
-  // create(payload: CreateBrandDto) {
-  //   this.counterId = this.counterId + 1;
-  //   const newBrand = {
-  //     id: this.counterId,
-  //     ...payload,
-  //   };
-  //   this.brands.push(newBrand);
-  //   return newBrand;
-  // }
+  create(payload: CreateBrandDto) {
+    const newBrand = this.brandRepositry.create(payload);
+    return this.brandRepositry.save(newBrand);
+  }
 
-  // update(id: number, payload: UpdateBrandDto) {
-  //   const brand = this.findOne(id);
-  //   if (!brand) {
-  //     throw new NotFoundException(`Brand #${id} not found`);
-  //   }
-  //   const index = this.brands.findIndex((item) => item.id === id);
-  //   this.brands[index] = {
-  //     ...brand,
-  //     ...payload,
-  //   };
-  //   return this.brands[index];
-  // }
-  // remove(id: number) {
-  //   const index = this.brands.findIndex((item) => item.id === id);
-  //   if (index === -1) {
-  //     throw new NotFoundException(`Brand with id:${id} not found`);
-  //   }
-  //   this.brands.splice(index, 1);
-  //   return true;
-  // }
+  async update(id: number, payload: UpdateBrandDto) {
+    const updatedBrand = await this.findOne(id);
+    this.brandRepositry.merge(updatedBrand, payload);
+    return this.brandRepositry.save(updatedBrand);
+  }
+  async remove(id: number) {
+    const deletedBrand = await this.findOne(id);
+    return this.brandRepositry.delete(deletedBrand);
+  }
 }

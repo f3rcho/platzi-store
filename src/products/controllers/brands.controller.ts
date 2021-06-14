@@ -30,28 +30,31 @@ export class BrandsController {
   getBrand(@Param('id') id: string) {
     return this.brandsService.findOne(+id);
   }
-  // @Post()
-  // @HttpCode(HttpStatus.CREATED)
-  // createBrand(@Body() payload: CreateBrandDto) {
-  //   return {
-  //     message: 'Brand Created',
-  //     data: this.brandsService.create(payload),
-  //   };
-  // }
-  // @Put(':id')
-  // @HttpCode(HttpStatus.OK)
-  // update(
-  //   @Param('id', ParseIntPipe) id: number,
-  //   @Body() payload: UpdateBrandDto,
-  // ) {
-  //   return {
-  //     message: `User updated`,
-  //     data: this.brandsService.update(id, payload),
-  //   };
-  // }
-  // @Delete(':id')
-  // @HttpCode(HttpStatus.OK)
-  // delete(@Param('id', ParseIntPipe) id: number) {
-  //   return { data: this.brandsService.remove(id) };
-  // }
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async createBrand(@Body() payload: CreateBrandDto) {
+    return {
+      message: 'Brand Created',
+      data: await this.brandsService.create(payload),
+    };
+  }
+  @Put(':id')
+  @HttpCode(HttpStatus.OK)
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() payload: UpdateBrandDto,
+  ) {
+    return {
+      message: `User updated`,
+      data: await this.brandsService.update(id, payload),
+    };
+  }
+  @Delete(':id')
+  @HttpCode(HttpStatus.OK)
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return {
+      message: `Brand with id:${id} deleted`,
+      data: await this.brandsService.remove(id),
+    };
+  }
 }

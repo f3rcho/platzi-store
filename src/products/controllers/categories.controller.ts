@@ -32,28 +32,28 @@ export class CategoriesController {
   getCategory(@Param('id', ParseIntPipe) id: number) {
     return this.categoriesService.findOne(id);
   }
-  // @Post()
-  // createCategory(@Body() payload: CreateCategoryDto) {
-  //   return {
-  //     message: 'Category Created',
-  //     data: this.categoriesService.create(payload),
-  //   };
-  // }
-  // @Put(':id')
-  // update(
-  //   @Param('id', ParseIntPipe) id: number,
-  //   @Body() payload: UpdateCategoryDto,
-  // ) {
-  //   return {
-  //     message: 'Category Updated',
-  //     data: this.categoriesService.update(id, payload),
-  //   };
-  // }
-  // @Delete(':id')
-  // delete(@Param('id', ParseIntPipe) id: number) {
-  //   return {
-  //     message: `Category deleted`,
-  //     data: this.categoriesService.remove(id),
-  //   };
-  // }
+  @Post()
+  async createCategory(@Body() payload: CreateCategoryDto) {
+    return {
+      message: 'Category Created',
+      data: await this.categoriesService.create(payload),
+    };
+  }
+  @Put(':id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() payload: UpdateCategoryDto,
+  ) {
+    return {
+      message: 'Category Updated',
+      data: await this.categoriesService.update(id, payload),
+    };
+  }
+  @Delete(':id')
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return {
+      message: `Category deleted`,
+      data: await this.categoriesService.remove(id),
+    };
+  }
 }

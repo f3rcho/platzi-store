@@ -396,3 +396,12 @@ And
 ```bash
 npm @types/pg -D
 ```
+
+### TypeORM pattern
+
+- Active record
+  Use the same instance. Use the model
+
+- Repository (Recommended, scalable)
+  Divided responsabilities and then
+  create new instance

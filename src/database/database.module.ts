@@ -18,6 +18,8 @@ import config from '../config/config';
           password,
           port,
           host,
+          synchronize: process.env.NODE_ENV === 'production' ? false : true,
+          autoLoadEntities: true,
         };
       },
     }),

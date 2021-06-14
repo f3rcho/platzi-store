@@ -1,14 +1,17 @@
 import { Injectable, NotFoundException, Logger, Inject } from '@nestjs/common';
-import { Client } from 'pg';
-import { User } from '../entities/users.entity';
 import { ConfigService } from '@nestjs/config';
+import { Client } from 'pg';
+
+import { User } from '../entities/users.entity';
 import { CreateUserDto, UpdateUserDto } from '../dtos/users.dto';
 
+import { ProductsService } from '../../products/services/products.service';
 @Injectable()
 export class UsersService {
   private readonly logger = new Logger(UsersService.name);
 
   constructor(
+    private productsService: ProductsService,
     private configService: ConfigService,
     @Inject('PG') private clientPG: Client,
   ) {}
@@ -86,12 +89,12 @@ export class UsersService {
     });
   }
 
-  // getOrderByUser(id: number): Order {
-  //   const user = this.findOne(id);
-  //   return {
-  //     date: new Date(),
-  //     user,
-  //     products: this.productsService.findAll(),
-  //   };
-  // }
+  async getOrderByUser(id: number) {
+    const user = this.findOne(id);
+    return {
+      date: new Date(),
+      user,
+      products: await this.productsService.findAll(),
+    };
+  }
 }

@@ -56,7 +56,7 @@ export class CustomersService {
     return {
       date: new Date(),
       customer,
-      products: this.productsService.findAll(),
+      products: [],
     };
   }
 }

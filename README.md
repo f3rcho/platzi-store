@@ -384,3 +384,15 @@ pgadmin:
 
 Once we run docker-compose up -d, we could access to localhost:5050 and configured our db server.
 We need to extract the ip address from our docker container running docker inspect.
+
+To work with postgres, we need to install
+
+```bash
+npm i pg
+```
+
+And
+
+```bash
+npm @types/pg -D
+```

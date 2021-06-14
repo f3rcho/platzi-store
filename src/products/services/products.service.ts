@@ -6,8 +6,22 @@ import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
 export class ProductsService {
   private counterId = 2;
   private products: Product[] = [
-    { id: 1, sku: '209060', name: 'Some shoes', price: 19990 },
-    { id: 2, sku: '209038', name: 'Velvet', price: 18990 },
+    {
+      id: 1,
+      sku: '209060',
+      name: 'Some shoes',
+      price: 19990,
+      stock: 0,
+      url: 'xxx.com',
+    },
+    {
+      id: 2,
+      sku: '209038',
+      name: 'Velvet',
+      price: 18990,
+      stock: 0,
+      url: 'xxx.com',
+    },
   ];
   /**
    *

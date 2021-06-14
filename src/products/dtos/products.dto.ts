@@ -15,5 +15,10 @@ export class CreateProductDto {
   @IsPositive()
   @ApiProperty({ description: 'porducts Price ' })
   readonly price: number;
+
+  @IsNumber()
+  @IsPositive()
+  @ApiProperty({ description: 'products stock' })
+  readonly stock: number;
 }
 export class UpdateProductDto extends PartialType(CreateProductDto) {}

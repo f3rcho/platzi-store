@@ -405,3 +405,7 @@ npm @types/pg -D
 - Repository (Recommended, scalable)
   Divided responsabilities and then
   create new instance
+
+### TypeORM with mysql
+
+- A new branch was created with the implementation with mysql and phpmyadmin called typeorm_mysql

@@ -38,6 +38,6 @@ export class ProductsService {
 
   async remove(id: number) {
     const deletedProduct = await this.findOne(id);
-    return this.productRepositry.delete(deletedProduct);
+    return this.productRepositry.delete(deletedProduct.id);
   }
 }

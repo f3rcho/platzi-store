@@ -8,6 +8,7 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  Logger,
   // ParseIntPipe,
 } from '@nestjs/common';
 import { ApiResponse, ApiBody, ApiTags, ApiOperation } from '@nestjs/swagger';
@@ -19,6 +20,7 @@ import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
 @Controller('products')
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
+  logger = new Logger('ProductsController');
   /**
    *
    * @returns All the elements from products
@@ -36,6 +38,7 @@ export class ProductsController {
   @Get()
   @HttpCode(HttpStatus.OK)
   getProducts() {
+    this.logger.log(`[getProducts]: Resquest`);
     return this.productsService.findAll();
   }
   /**
@@ -53,6 +56,7 @@ export class ProductsController {
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   getProduct(@Param('id', ParseIntPipe) id: number) {
+    this.logger.log(`[getProductById]: Resquest`);
     return this.productsService.findOne(id);
   }
   /**
@@ -70,6 +74,9 @@ export class ProductsController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   createProduct(@Body() payload: CreateProductDto) {
+    this.logger.log(
+      `[createProduct]: Resquest with payload:${JSON.stringify(payload)}`,
+    );
     return this.productsService.create(payload);
   }
   /**
@@ -81,9 +88,14 @@ export class ProductsController {
   @HttpCode(HttpStatus.OK)
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() paylaod: UpdateProductDto,
+    @Body() payload: UpdateProductDto,
   ) {
-    return this.productsService.update(id, paylaod);
+    this.logger.log(
+      `[updateProduct]: Resquest id:${id} and payload:${JSON.stringify(
+        payload,
+      )}`,
+    );
+    return this.productsService.update(id, payload);
   }
   /**
    *
@@ -93,6 +105,7 @@ export class ProductsController {
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   delete(@Param('id', ParseIntPipe) id: number) {
+    this.logger.log(`[deleteProductById]: Resquest id:${id} `);
     return this.productsService.remove(id);
   }
 }

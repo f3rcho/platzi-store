@@ -32,6 +32,6 @@ export class CategoriesService {
   }
   async remove(id: number) {
     const deletedCategory = await this.findOne(id);
-    return this.categoryRepositry.delete(deletedCategory);
+    return this.categoryRepositry.delete(deletedCategory.id);
   }
 }

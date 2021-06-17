@@ -32,6 +32,6 @@ export class BrandsService {
   }
   async remove(id: number) {
     const deletedBrand = await this.findOne(id);
-    return this.brandRepositry.delete(deletedBrand);
+    return this.brandRepositry.delete(deletedBrand.id);
   }
 }

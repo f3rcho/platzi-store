@@ -9,8 +9,9 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { UsersService } from '../services/users.service';
 import { ParseIntPipe } from '../../common/parse-int.pipe';
@@ -20,51 +21,50 @@ import { CreateUserDto, UpdateUserDto } from '../dtos/users.dto';
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
+  logger = new Logger('UsersController');
   @Get()
   @HttpCode(HttpStatus.OK)
   getUsers(@Query('limit') limit = 100, @Query('offset') offset = 5) {
-    const users = this.usersService.findAll();
-    return {
-      message: `Users limit: ${limit} and offset: ${offset}`,
-      data: users,
-    };
+    this.logger.log(`[getUsers]: Resquest`);
+    return this.usersService.findAll();
   }
-  @Get('tasks')
-  @HttpCode(HttpStatus.OK)
-  tasks() {
-    return this.usersService.getTasks();
-  }
+
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   getUser(@Param('id', ParseIntPipe) id: number) {
-    return { data: this.usersService.findOne(id) };
+    this.logger.log(`[getUserById]: Resquest`);
+    return this.usersService.findOne(id);
   }
 
   @Post()
-  @HttpCode(HttpStatus.CREATED)
+  @ApiResponse({ status: HttpStatus.CREATED, description: 'User created' })
   createUser(@Body() payload: CreateUserDto) {
-    return {
-      message: 'User Created',
-      data: this.usersService.create(payload),
-    };
+    this.logger.log(
+      `[createUser]: Resquest with payload:${JSON.stringify(payload)}`,
+    );
+    return this.usersService.create(payload);
   }
 
   @Put(':id')
-  @HttpCode(HttpStatus.OK)
+  @ApiResponse({ status: HttpStatus.OK, description: 'User updated' })
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() payload: UpdateUserDto,
   ) {
-    return {
-      message: `User updated`,
-      data: this.usersService.update(id, payload),
-    };
+    this.logger.log(
+      `[updateUser]: Resquest id:${id} and payload:${JSON.stringify(payload)}`,
+    );
+    return this.usersService.update(id, payload);
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.OK)
-  delete(@Param('id', ParseIntPipe) id: number) {
-    return { data: this.usersService.remove(id) };
+  @ApiResponse({ status: HttpStatus.OK, description: 'User removed' })
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    this.logger.log(`[deleteUserById]: Resquest id:${id} `);
+    this.usersService.remove(id);
+    return {
+      message: `User with id:${id} deleted`,
+    };
   }
   // orders
   // @Get(':id/orders')

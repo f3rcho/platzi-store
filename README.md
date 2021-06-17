@@ -409,3 +409,27 @@ npm @types/pg -D
 ### TypeORM with mysql
 
 - A new branch was created with the implementation with mysql and phpmyadmin called typeorm_mysql
+
+### Migrations
+
+To generate migrations add the command in the package.json
+
+```json
+"migrations:generate": "npm run typeorm -- migration:generate -n"
+```
+
+Run migrations with:
+
+```json
+    "migrations:run": "npm run typeorm -- migration:run",
+```
+
+Dont forget to use the option "synchronize: false" in order to run de migrations
+
+and also, you can add:
+
+```json
+    "migrations:show": "npm run typeorm -- migration:show",
+    "migrations:drop": "npm run typeorm -- migration:drop",
+    "migrations:revert": "npm run typeorm -- migration:revert",
+```

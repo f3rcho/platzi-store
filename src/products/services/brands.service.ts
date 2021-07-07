@@ -14,7 +14,9 @@ export class BrandsService {
   }
 
   findOne(id: number) {
-    const brand = this.brandRepositry.findOne(id);
+    const brand = this.brandRepositry.findOne(id, {
+      relations: ['products'],
+    });
     if (!brand) {
       throw new NotFoundException(`Brand #${id} not found`);
     }

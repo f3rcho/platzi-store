@@ -4,9 +4,11 @@ import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { BrandsService } from './brands.service';
 @Injectable()
 export class ProductsService {
   constructor(
+    private brandsService: BrandsService,
     @InjectRepository(Product) private productRepositry: Repository<Product>,
   ) {}
   /**
@@ -14,7 +16,9 @@ export class ProductsService {
    * @returns All the elements from products
    */
   findAll() {
-    return this.productRepositry.find();
+    return this.productRepositry.find({
+      relations: ['brand'],
+    });
   }
 
   async findOne(id: number) {
@@ -25,13 +29,21 @@ export class ProductsService {
     return product;
   }
 
-  create(payload: CreateProductDto) {
+  async create(payload: CreateProductDto) {
     const newProduct = this.productRepositry.create(payload);
+    if (payload.brandId) {
+      const brand = await this.brandsService.findOne(payload.brandId);
+      newProduct.brand = brand;
+    }
     return this.productRepositry.save(newProduct);
   }
 
   async update(id: number, payload: UpdateProductDto) {
     const updatedProduct = await this.findOne(id);
+    if (payload.brandId) {
+      const brand = await this.brandsService.findOne(payload.brandId);
+      updatedProduct.brand = brand;
+    }
     this.productRepositry.merge(updatedProduct, payload);
     return this.productRepositry.save(updatedProduct);
   }

@@ -4,7 +4,10 @@ import {
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
+import { Customer } from './customers.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -16,6 +19,9 @@ export class User {
   @Column({ type: 'varchar', length: 255 })
   email: string;
 
+  @Column({ type: 'varchar', length: 100 })
+  password: string;
+
   @Column({ type: 'bool' })
   isAdmin: boolean;
 
@@ -24,4 +30,8 @@ export class User {
 
   @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+
+  @OneToOne(() => Customer, (customer) => customer.user, { nullable: true })
+  @JoinColumn()
+  customer: Customer;
 }

@@ -4,7 +4,10 @@ import {
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
 } from 'typeorm';
+import { User } from './users.entity';
+
 @Entity()
 export class Customer {
   @PrimaryGeneratedColumn()
@@ -21,4 +24,7 @@ export class Customer {
 
   @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+
+  @OneToOne(() => User, (user) => user.customer, { nullable: true })
+  user: User;
 }

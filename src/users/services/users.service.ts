@@ -6,15 +6,19 @@ import { User } from '../entities/users.entity';
 import { CreateUserDto, UpdateUserDto } from '../dtos/users.dto';
 
 import { ProductsService } from '../../products/services/products.service';
+import { CustomersService } from './customers.service';
 @Injectable()
 export class UsersService {
   constructor(
     private productsService: ProductsService,
+    private customersService: CustomersService,
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
   findAll() {
-    return this.userRepository.find();
+    return this.userRepository.find({
+      relations: ['customer'],
+    });
   }
 
   async findOne(id: number) {
@@ -25,8 +29,12 @@ export class UsersService {
     return user;
   }
 
-  create(payload: CreateUserDto) {
+  async create(payload: CreateUserDto) {
     const newUser = this.userRepository.create(payload);
+    if (payload.customerId) {
+      const customer = await this.customersService.findOne(payload.customerId);
+      newUser.customer = customer;
+    }
     return this.userRepository.save(newUser);
   }
 

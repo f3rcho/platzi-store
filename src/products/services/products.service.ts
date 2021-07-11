@@ -4,12 +4,14 @@ import { CreateProductDto, UpdateProductDto } from '../dtos/products.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { BrandsService } from './brands.service';
+import { Category } from '../entities/categories.entity';
+import { Brand } from '../entities/brands.entity';
 @Injectable()
 export class ProductsService {
   constructor(
-    private brandsService: BrandsService,
     @InjectRepository(Product) private productRepositry: Repository<Product>,
+    @InjectRepository(Category) private categoryRepositry: Repository<Category>,
+    @InjectRepository(Brand) private brandRepositry: Repository<Brand>,
   ) {}
   /**
    *
@@ -22,7 +24,9 @@ export class ProductsService {
   }
 
   async findOne(id: number) {
-    const product = await this.productRepositry.findOne(id);
+    const product = await this.productRepositry.findOne(id, {
+      relations: ['brand', 'categories'],
+    });
     if (!product) {
       throw new NotFoundException(`Product #${id} not found`);
     }
@@ -32,8 +36,14 @@ export class ProductsService {
   async create(payload: CreateProductDto) {
     const newProduct = this.productRepositry.create(payload);
     if (payload.brandId) {
-      const brand = await this.brandsService.findOne(payload.brandId);
+      const brand = await this.brandRepositry.findOne(payload.brandId);
       newProduct.brand = brand;
+    }
+    if (payload.categoriesIds) {
+      const categories = await this.categoryRepositry.findByIds(
+        payload.categoriesIds,
+      );
+      newProduct.categories = categories;
     }
     return this.productRepositry.save(newProduct);
   }
@@ -41,7 +51,7 @@ export class ProductsService {
   async update(id: number, payload: UpdateProductDto) {
     const updatedProduct = await this.findOne(id);
     if (payload.brandId) {
-      const brand = await this.brandsService.findOne(payload.brandId);
+      const brand = await this.brandRepositry.findOne(payload.brandId);
       updatedProduct.brand = brand;
     }
     this.productRepositry.merge(updatedProduct, payload);

@@ -10,10 +10,14 @@ export class CategoriesService {
   ) {}
 
   findAll() {
-    return this.categoryRepositry.find();
+    return this.categoryRepositry.find({
+      relations: ['products'],
+    });
   }
   async findOne(id: number) {
-    const category = await this.categoryRepositry.findOne(id);
+    const category = await this.categoryRepositry.findOne(id, {
+      relations: ['products'],
+    });
     if (!category) {
       throw new NotFoundException(`Category #${id} not found`);
     }

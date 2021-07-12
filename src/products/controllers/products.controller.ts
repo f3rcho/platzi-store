@@ -99,6 +99,38 @@ export class ProductsController {
   }
   /**
    *
+   * @returns update category to product
+   */
+  @ApiOperation({ summary: 'Update category to product' })
+  @Put(':id/category/:categoryId')
+  @HttpCode(HttpStatus.OK)
+  updateCategoryToProduct(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+  ) {
+    this.logger.log(
+      `[addCategoryToProduct]: Resquest ID:${id} and category ID:${categoryId}`,
+    );
+    return this.productsService.addCategoryToProduct(id, categoryId);
+  }
+  /**
+   *
+   * @returns delete a category from a product
+   */
+  @ApiOperation({ summary: 'Delete a category from a product by ids' })
+  @Delete(':id/category/:categoryId')
+  @HttpCode(HttpStatus.OK)
+  deleteCategory(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+  ) {
+    this.logger.log(
+      `[removeCategoryByProduct]: Resquest productId:${id} and categoryId:${categoryId} `,
+    );
+    return this.productsService.removeCategoryByProduct(id, categoryId);
+  }
+  /**
+   *
    * @returns delete a product
    */
   @ApiOperation({ summary: 'Delete a product by ID' })

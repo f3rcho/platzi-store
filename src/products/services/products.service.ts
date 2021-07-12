@@ -28,7 +28,7 @@ export class ProductsService {
       relations: ['brand', 'categories'],
     });
     if (!product) {
-      throw new NotFoundException(`Product #${id} not found`);
+      throw new NotFoundException(`Product with ID:${id} not found`);
     }
     return product;
   }
@@ -61,5 +61,30 @@ export class ProductsService {
   async remove(id: number) {
     const deletedProduct = await this.findOne(id);
     return this.productRepositry.delete(deletedProduct.id);
+  }
+
+  async removeCategoryByProduct(productId: number, categoryId: number) {
+    const product = await this.productRepositry.findOne(productId, {
+      relations: ['categories'],
+    });
+    product.categories = product.categories.filter(
+      (item) => item.id !== categoryId,
+    );
+    return this.productRepositry.save(product);
+  }
+
+  async addCategoryToProduct(productId: number, categoryId: number) {
+    const product = await this.productRepositry.findOne(productId, {
+      relations: ['categories'],
+    });
+    if (!product) {
+      throw new NotFoundException(`Product with ID:${productId} not found`);
+    }
+    const category = await this.categoryRepositry.findOne(categoryId);
+    if (!category) {
+      throw new NotFoundException(`Category with ID:${categoryId} not found`);
+    }
+    product.categories.push(category);
+    return this.productRepositry.save(product);
   }
 }

@@ -8,8 +8,8 @@ import {
   ManyToMany,
   JoinTable,
 } from 'typeorm';
-import { Brand } from '../entities/brands.entity';
-import { Category } from '../entities/categories.entity';
+import { Brand } from './brand.entity';
+import { Category } from './category.entity';
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn()

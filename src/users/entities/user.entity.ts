@@ -7,7 +7,7 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { Customer } from './customers.entity';
+import { Customer } from './customer.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()

@@ -4,20 +4,17 @@ import {
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToOne,
+  ManyToMany,
 } from 'typeorm';
-import { User } from './users.entity';
 
+import { Product } from './product.entity';
 @Entity()
-export class Customer {
+export class Category {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ type: 'varchar', length: 255 })
   name: string;
-
-  @Column({ type: 'varchar', length: 255 })
-  email: string;
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createAt: Date;
@@ -25,6 +22,6 @@ export class Customer {
   @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @OneToOne(() => User, (user) => user.customer, { nullable: true })
-  user: User;
+  @ManyToMany(() => Product, (product) => product.categories)
+  products: Product[];
 }

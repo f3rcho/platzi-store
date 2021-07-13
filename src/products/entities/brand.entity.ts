@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { Product } from './products.entity';
+import { Product } from './product.entity';
 @Entity()
 export class Brand {
   @PrimaryGeneratedColumn()

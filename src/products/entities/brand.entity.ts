@@ -7,7 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { Product } from './product.entity';
-@Entity()
+@Entity({ name: 'brands' })
 export class Brand {
   @PrimaryGeneratedColumn()
   id: number;
@@ -18,10 +18,18 @@ export class Brand {
   @Column({ type: 'text' })
   image: string;
 
-  @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
-  createAt: Date;
+  @CreateDateColumn({
+    name: 'created_at',
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @UpdateDateColumn({
+    name: 'updated_at',
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   updatedAt: Date;
 
   @OneToMany(() => Product, (product) => product.brand)

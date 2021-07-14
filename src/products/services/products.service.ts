@@ -6,7 +6,7 @@ import {
   UpdateProductDto,
 } from '../dtos/products.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, FindConditions, Between } from 'typeorm';
 
 import { Category } from '../entities/category.entity';
 import { Brand } from '../entities/brand.entity';
@@ -24,8 +24,15 @@ export class ProductsService {
   findAll(params?: FilterProductDto) {
     if (params) {
       const { limit, offset } = params;
+      const { minPrice, maxPrice } = params;
+      const where: FindConditions<Product> = {};
+
+      if (minPrice && maxPrice) {
+        where.price = Between(minPrice, maxPrice);
+      }
       return this.productRepositry.find({
         relations: ['brand'],
+        where,
         take: limit,
         skip: offset,
       });

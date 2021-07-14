@@ -433,3 +433,32 @@ and also, you can add:
     "migrations:drop": "npm run typeorm -- migration:drop",
     "migrations:revert": "npm run typeorm -- migration:revert",
 ```
+
+### Indexes
+
+we can add a index to group or individualy by using decorator @Index from typeORM
+
+```js
+@Entity()
+// group
+@Index(['price', 'stock'])
+export class Product {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ type: 'varchar', length: 255, unique: true })
+  sku: string;
+
+  @Column({ type: 'varchar', length: 255 })
+  name: string;
+
+  // or individualy
+  @Index()
+  @Column({ type: 'int' })
+  price: number;
+
+  @Column({ type: 'int' })
+  stock: number;
+```
+
+And then generate and run migrations

@@ -4,6 +4,11 @@
 $ nest new platzi-store
 ```
 
+## create a module
+```bash
+$ nest generate mo <module_name>
+```
+
 ## Create a controller
 
 ```bash
